@@ -12,6 +12,7 @@ import { RecipesPageModule } from '../pages/recipes/recipes.module';
 import { ShoppingListPage } from '../pages/shopping-list/shopping-list';
 import { ShoppingListPageModule } from '../pages/shopping-list/shopping-list.module';
 import { TabsPage } from '../pages/tabs/tabs';
+import { ShoppingListService } from '../services/shopping-list.service';
 
 import { MyApp } from './app.component';
 
@@ -40,7 +41,8 @@ import { MyApp } from './app.component';
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: ErrorHandler, useClass: IonicErrorHandler }
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    ShoppingListService
   ]
 })
 export class AppModule {
