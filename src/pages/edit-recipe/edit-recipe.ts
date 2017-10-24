@@ -9,6 +9,7 @@ import {
   ToastController
 } from 'ionic-angular';
 import { RecipesService } from '../../services/recipes.service';
+import { Recipe } from '../../models/recipe';
 
 @IonicPage()
 @Component({
@@ -19,6 +20,8 @@ export class EditRecipePage implements OnInit {
   mode = 'New';
   difficultyOptions = [ 'Easy', 'Medium', 'Hard' ];
   recipeForm: FormGroup;
+  recipe: Recipe;
+  index: number;
 
   constructor(private navParams: NavParams,
               private navController: NavController,
@@ -30,6 +33,10 @@ export class EditRecipePage implements OnInit {
 
   ngOnInit() {
     this.mode = this.navParams.get('mode');
+    if (this.mode === 'Edit') {
+      this.recipe = this.navParams.get('recipe');
+      this.index = this.navParams.get('index');
+    }
     this.initForm();
   }
 
@@ -37,10 +44,14 @@ export class EditRecipePage implements OnInit {
     let formIngredients = this.recipeForm.value.ingredients;
     if (formIngredients.length > 0) {
       this.recipeForm.value.ingredients = formIngredients.map(item => {
-        return {name: item, amount: 1};
+        return { name: item, amount: 1 };
       });
     }
-    this.recipesService.addRecipe(this.recipeForm.value);
+    if (this.mode === 'Edit') {
+      this.recipesService.updateRecipe(this.index, this.recipeForm.value);
+    } else {
+      this.recipesService.addRecipe(this.recipeForm.value);
+    }
     this.recipeForm.reset();
     this.navController.popToRoot();
   }
@@ -81,11 +92,24 @@ export class EditRecipePage implements OnInit {
   }
 
   private initForm() {
+    let title = null;
+    let description = null;
+    let difficulty = this.difficultyOptions[ 1 ];
+    let ingredients = [];
+
+    if (this.mode === 'Edit') {
+      title = this.recipe.title;
+      description = this.recipe.description;
+      difficulty = this.recipe.difficulty;
+      for (let ingredient of this.recipe.ingredients) {
+        ingredients.push(new FormControl(ingredient.name, Validators.required));
+      }
+    }
     this.recipeForm = new FormGroup({
-      'title': new FormControl(null, Validators.required),
-      'description': new FormControl(null, Validators.required),
-      'difficulty': new FormControl(this.difficultyOptions[ 1 ], Validators.required),
-      'ingredients': new FormArray([])
+      'title': new FormControl(title, Validators.required),
+      'description': new FormControl(description, Validators.required),
+      'difficulty': new FormControl(difficulty, Validators.required),
+      'ingredients': new FormArray(ingredients)
     });
   }
 
