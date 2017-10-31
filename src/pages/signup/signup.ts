@@ -17,7 +17,8 @@ export class SignupPage {
       content: 'Sign up...'
     });
     loading.present();
-    this.authService.signup(form.value.email, form.value.password).then((data) => {
+    this.authService.signup(form.value.email, form.value.password)
+    .then((data) => {
       loading.dismiss();
     }).catch((error) => {
       loading.dismiss();

@@ -13,7 +13,7 @@
 
 
 <ion-content padding>
-  <form #f="ngForm" (ngSubmit)="onSubmit()">
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
 	<ion-list>
 	  <ion-item>
 		<ion-label fixed>Mail</ion-label>

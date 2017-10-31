@@ -15,12 +15,22 @@ export class MyApp {
   tabsPage: any = TabsPage;
   signinPage: any = SigninPage;
   signupPage: any = SignupPage;
+  isAuthenticated = false;
   @ViewChild('nav') nav: NavController;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private menuController: MenuController) {
     firebase.initializeApp({
       apiKey: 'AIzaSyACTK1O21akT7cjnoecjF-hOF-Oc54anfk',
       authDomain: 'plastikaweb-recipebook.firebaseapp.com'
+    });
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.isAuthenticated = true;
+        this.nav.setRoot(this.tabsPage);
+      } else {
+        this.isAuthenticated = false;
+        this.nav.setRoot(this.signinPage);
+      }
     });
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
