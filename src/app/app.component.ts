@@ -7,18 +7,19 @@ import { SigninPage } from '../pages/signin/signin';
 import { SignupPage } from '../pages/signup/signup';
 
 import { TabsPage } from '../pages/tabs/tabs';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  tabsPage: any = TabsPage;
+  rootPage: any = TabsPage;
   signinPage: any = SigninPage;
   signupPage: any = SignupPage;
   isAuthenticated = false;
   @ViewChild('nav') nav: NavController;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private menuController: MenuController) {
+  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private menuController: MenuController, private authService: AuthService) {
     firebase.initializeApp({
       apiKey: 'AIzaSyACTK1O21akT7cjnoecjF-hOF-Oc54anfk',
       authDomain: 'plastikaweb-recipebook.firebaseapp.com'
@@ -26,10 +27,10 @@ export class MyApp {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.isAuthenticated = true;
-        this.nav.setRoot(this.tabsPage);
+        this.rootPage = TabsPage;
       } else {
         this.isAuthenticated = false;
-        this.nav.setRoot(this.signinPage);
+        this.rootPage = SigninPage;
       }
     });
     platform.ready().then(() => {
@@ -46,7 +47,9 @@ export class MyApp {
   }
 
   logout() {
-
+    this.authService.signout();
+    this.menuController.close();
+    this.nav.setRoot(SigninPage);
   }
 }
 
