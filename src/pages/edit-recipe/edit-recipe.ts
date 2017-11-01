@@ -46,7 +46,10 @@ export class EditRecipePage implements OnInit {
       this.recipeForm.value.ingredients = formIngredients.map(item => {
         return { name: item, amount: 1 };
       });
+    } else {
+      this.recipeForm.value.ingredients = [];
     }
+    console.log(this.recipeForm.value);
     if (this.mode === 'Edit') {
       this.recipesService.updateRecipe(this.index, this.recipeForm.value);
     } else {

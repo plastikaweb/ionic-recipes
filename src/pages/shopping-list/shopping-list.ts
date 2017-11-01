@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AlertController, IonicPage, LoadingController, PopoverController } from 'ionic-angular';
+import { DbOptions } from '../../app/db-options/db-options';
 import { Ingredient } from '../../models/ingredient';
 import { AuthService } from '../../services/auth.service';
 import { ShoppingListService } from '../../services/shopping-list.service';
-import { ShoppingListOptions } from './shopping-list-options/shopping-list-options';
 
 @IonicPage()
 @Component({
@@ -33,12 +33,14 @@ export class ShoppingListPage {
 
   showOptions(ev: MouseEvent) {
     const loading = this.loadingController.create({
-      content: 'Please, wqit...'
+      content: 'Please, wait...'
     });
-    const popover = this.popoverController.create(ShoppingListOptions);
+    const popover = this.popoverController.create(DbOptions);
     popover.present({ ev });
     popover.onDidDismiss(data => {
-      console.log(data);
+      if (!data) {
+        return;
+      }
       this.authService.getUser().getToken()
         .then((token: string) => {
           loading.present();

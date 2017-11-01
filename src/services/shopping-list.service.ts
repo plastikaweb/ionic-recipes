@@ -35,8 +35,8 @@ export class ShoppingListService {
 
   fetchList(token: string) {
     const userId = this.authService.getUser().uid;
-    return this.http.get(`${FIREBASE_URL}${userId}/shopping-list.json?auth`)
-      .map((response: Response) => response.json())
+    return this.http.get(`${FIREBASE_URL}${userId}/shopping-list.json?auth=${token}`)
+      .map((response: Response) => response.json() || [])
       .do((data) => this.ingredients = data || []);
   }
 }

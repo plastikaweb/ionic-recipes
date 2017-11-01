@@ -11,7 +11,6 @@ import { RecipePageModule } from '../pages/recipe/recipe.module';
 import { RecipesPage } from '../pages/recipes/recipes';
 import { RecipesPageModule } from '../pages/recipes/recipes.module';
 import { ShoppingListPage } from '../pages/shopping-list/shopping-list';
-import { ShoppingListOptions } from '../pages/shopping-list/shopping-list-options/shopping-list-options';
 import { ShoppingListPageModule } from '../pages/shopping-list/shopping-list.module';
 import { SigninPage } from '../pages/signin/signin';
 import { SigninPageModule } from '../pages/signin/signin.module';
@@ -23,11 +22,13 @@ import { RecipesService } from '../services/recipes.service';
 import { ShoppingListService } from '../services/shopping-list.service';
 
 import { MyApp } from './app.component';
+import { DbOptions } from './db-options/db-options';
 
 @NgModule({
   declarations: [
     MyApp,
-    TabsPage
+    TabsPage,
+    DbOptions
   ],
   imports: [
     BrowserModule,
@@ -47,7 +48,7 @@ import { MyApp } from './app.component';
     RecipePage,
     RecipesPage,
     ShoppingListPage,
-    ShoppingListOptions,
+    DbOptions,
     TabsPage,
     SigninPage,
     SignupPage
