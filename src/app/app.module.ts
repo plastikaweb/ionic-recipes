@@ -1,4 +1,5 @@
 import { ErrorHandler, NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -10,17 +11,18 @@ import { RecipePageModule } from '../pages/recipe/recipe.module';
 import { RecipesPage } from '../pages/recipes/recipes';
 import { RecipesPageModule } from '../pages/recipes/recipes.module';
 import { ShoppingListPage } from '../pages/shopping-list/shopping-list';
+import { ShoppingListOptions } from '../pages/shopping-list/shopping-list-options/shopping-list-options';
 import { ShoppingListPageModule } from '../pages/shopping-list/shopping-list.module';
+import { SigninPage } from '../pages/signin/signin';
+import { SigninPageModule } from '../pages/signin/signin.module';
+import { SignupPage } from '../pages/signup/signup';
+import { SignupPageModule } from '../pages/signup/signup.module';
 import { TabsPage } from '../pages/tabs/tabs';
+import { AuthService } from '../services/auth.service';
 import { RecipesService } from '../services/recipes.service';
 import { ShoppingListService } from '../services/shopping-list.service';
 
 import { MyApp } from './app.component';
-import { SigninPageModule } from '../pages/signin/signin.module';
-import { SignupPageModule } from '../pages/signup/signup.module';
-import { SigninPage } from '../pages/signin/signin';
-import { SignupPage } from '../pages/signup/signup';
-import { AuthService } from '../services/auth.service';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { AuthService } from '../services/auth.service';
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp),
     EditRecipePageModule,
     RecipePageModule,
@@ -44,6 +47,7 @@ import { AuthService } from '../services/auth.service';
     RecipePage,
     RecipesPage,
     ShoppingListPage,
+    ShoppingListOptions,
     TabsPage,
     SigninPage,
     SignupPage

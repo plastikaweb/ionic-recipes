@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { IonicPage } from 'ionic-angular';
-import { ShoppingListService } from '../../services/shopping-list.service';
+import { AlertController, IonicPage, LoadingController, PopoverController } from 'ionic-angular';
 import { Ingredient } from '../../models/ingredient';
+import { AuthService } from '../../services/auth.service';
+import { ShoppingListService } from '../../services/shopping-list.service';
+import { ShoppingListOptions } from './shopping-list-options/shopping-list-options';
 
 @IonicPage()
 @Component({
@@ -12,7 +14,7 @@ import { Ingredient } from '../../models/ingredient';
 export class ShoppingListPage {
   ingredients: Ingredient[] = [];
 
-  constructor(private shoppingListService: ShoppingListService) {}
+  constructor(private shoppingListService: ShoppingListService, private popoverController: PopoverController, private authService: AuthService, private loadingController: LoadingController, private alertController: AlertController) {}
 
   ionViewWillEnter() {
     this.loadItems();
@@ -29,8 +31,55 @@ export class ShoppingListPage {
     this.loadItems();
   }
 
+  showOptions(ev: MouseEvent) {
+    const loading = this.loadingController.create({
+      content: 'Please, wqit...'
+    });
+    const popover = this.popoverController.create(ShoppingListOptions);
+    popover.present({ ev });
+    popover.onDidDismiss(data => {
+      console.log(data);
+      this.authService.getUser().getToken()
+        .then((token: string) => {
+          loading.present();
+          if (data.action === 'load') {
+            this.shoppingListService.fetchList(token)
+              .subscribe(
+                (ingredients: Ingredient[]) => {
+                  loading.dismiss();
+                  this.ingredients = ingredients || [];
+                },
+                (error) => {
+                  loading.dismiss();
+                  this.handleError(error.json().error);
+                }
+              );
+          } else if (data.action === 'store') {
+            this.shoppingListService.saveList(token)
+              .subscribe(
+                () => loading.dismiss(),
+                (error) => {
+                  loading.dismiss();
+                  this.handleError(error.json().error);
+                })
+            ;
+          }
+        });
+
+    });
+  }
+
   private loadItems() {
     this.ingredients = this.shoppingListService.getItems();
+  }
+
+  private handleError(error: string) {
+    const alert = this.alertController.create({
+      title: 'An error occured!',
+      message: error,
+      buttons: [ 'Ok' ]
+    });
+    alert.present();
   }
 
 }

@@ -3,6 +3,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import firebase from 'firebase';
 import { MenuController, NavController, Platform } from 'ionic-angular';
+import { FIREBASE_CONFIG } from '../config/firebase.config';
 import { SigninPage } from '../pages/signin/signin';
 import { SignupPage } from '../pages/signup/signup';
 
@@ -20,10 +21,7 @@ export class MyApp {
   @ViewChild('nav') nav: NavController;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private menuController: MenuController, private authService: AuthService) {
-    firebase.initializeApp({
-      apiKey: 'AIzaSyACTK1O21akT7cjnoecjF-hOF-Oc54anfk',
-      authDomain: 'plastikaweb-recipebook.firebaseapp.com'
-    });
+    firebase.initializeApp(FIREBASE_CONFIG);
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.isAuthenticated = true;
